@@ -3,7 +3,7 @@ import "./App.css";
 import { CharacterHook } from "@lib/services";
 function App() {
   const [page, setPage] = useState(1);
-  const { data, isLoading } = CharacterHook.getCharacters({ page });
+  const { data, isLoading, refetch } = CharacterHook.getCharacters({ page });
 
   const totalPage = useMemo(() => {
     if (data?.res) return data.res.info.pages;
@@ -23,7 +23,13 @@ function App() {
     <div>
       <div className="header">
         <h2>Rick and Morty characters</h2>
-        {isLoading && <span>Loading please wait...</span>}
+        {isLoading ? (
+          <span>Loading please wait...</span>
+        ) : (
+          <button disabled={isLoading} onClick={() => refetch()}>
+            Refetch
+          </button>
+        )}
       </div>
       <div className="grid">
         {data?.res?.results.map((item) => (
